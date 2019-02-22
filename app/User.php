@@ -64,4 +64,11 @@ class User extends Authenticatable implements JWTsubject
     {
         $this->attributes['password'] = bcrypt($value);
     }
+
+    public function recipes()
+    {
+      return $this->hasOne(Book::class);
+    }
+
+
 }
