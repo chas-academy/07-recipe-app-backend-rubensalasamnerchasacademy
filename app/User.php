@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 class User extends Authenticatable implements JWTsubject
 {
     use Notifiable;
@@ -67,8 +68,10 @@ class User extends Authenticatable implements JWTsubject
 
     public function recipes()
     {
-      return $this->hasOne(Book::class);
+      return $this->hasOne(Recipe::class);
     }
+
+    
 
 
 }

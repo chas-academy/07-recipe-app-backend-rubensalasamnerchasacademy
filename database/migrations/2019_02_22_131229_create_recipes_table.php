@@ -11,12 +11,22 @@ class CreateRecipesTable extends Migration
      *
      * @return void
      */
-    public function up()
+    /* public function up()
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->string('title');
+            $table->timestamps();
+        });
+    } */
+    public function up()
+    {
+        Schema::create('recipes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->string('email');
+            $table->string('img');
             $table->timestamps();
         });
     }
