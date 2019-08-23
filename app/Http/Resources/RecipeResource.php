@@ -16,19 +16,12 @@ class RecipeResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'user' => $this->user,
             'title' => $this->title,
-            'email' => $this->email,
             'img' => $this->img,
             'description' => $this->description,
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
-            'user' => $this->user,
-            /* 'id' => $this->id,
-            'user_id' => $this->user_id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'created_at' => (string) $this->created_at,
-            'updated_at' => (string) $this->updated_at, */
         ];
     }
 }

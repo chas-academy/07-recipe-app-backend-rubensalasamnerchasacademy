@@ -7,50 +7,49 @@ use App\Http\Controllers\Controller;
 use App\Recipe;
 use App\Http\Resources\RecipeResource;
 use Illuminate\Support\Facades\Auth;
+use App\User;
 
 class RecipeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function index()
     {
-      return RecipeResource::collection(Recipe::with('title'));
+        return auth()->user()->recipes()->get();
     }
 
     public function store(Request $request)
-    {   
- 
-
-        /* if (Auth::check())
-        {
-            $id = Auth::user()->getId();
-        }       */
-       
-        $recipe = Recipe::create([
-            'title' => $request->title,
-            'email' => $request->email,
-            'img' => $request->img
-        ]);
-
-       
-        return new RecipeResource($recipe);
+    {
+        if (Auth::check()) {
+            $user_id = Auth::user()->id;
+            $checkRecipe = Recipe::all()->where('user_id', $user_id)->where('title', $request->title)->isEmpty();
+            if ($checkRecipe) {
+                $recipe = Recipe::create([
+                    'user_id' => $user_id,
+                    'title' => $request->title,
+                    'img' => $request->img
+                ]);
+                return response()->json(['message' => 'Recipe Added']);
+            } else {
+                return response()->json(['message' => 'Recipe already liked']);
+            }
+        }
     }
 
-    
-
+    /**
+    * Display a listing of the resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
     public function show(Recipe $recipe)
     {
+        /* $recipes = Recipe::where('user_id', $request->user()->id->get()
+        return response()->json($recipes); */
 
-       /*  DB::table('users')
-            ->where('name', '=', 'John') */
-        /* $recipe = Recipe::all(); */
-
-        /* $results = Recipe::find('recipe')->where('email', "=", $recipe); */
-        /* ('S * from recipes where id = :id', ['id' => 1]);
-        ("SELECT * FROM posts WHERE userid in '($user_ids)'"); */
-
-        return RecipeResource::collection(Recipe::all());
-        /* return RecipeResource::collection($results); */
-        
-        /*  return new RecipeResource($recipe); */
+        /* return RecipeResource::collection(Recipe::all()); */
     }
 
     public function update(Request $request, Recipe $recipe)
@@ -65,15 +64,12 @@ class RecipeController extends Controller
         return new RecipeResource($recipe);
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request, $id)
     {
-       /*  $result = Recipe::where('id', $request->id)
-        $result->delete();
-       $result = Recipe::where('id', $request->id)->delete();
-       $result = Recipe::delete('id', $request->id)->delete(); */
-        
         Recipe::where('id', $request->id)->delete();
-        return RecipeResource::collection(Recipe::all());
+        $recipes = Recipe::where('user_id', $request->user()->id)->get();
+        return response()->json($recipes);
+        /* return RecipeResource::collection(Recipe::all()); */
         /* return response()->json(null, 204); */
     }
 }
