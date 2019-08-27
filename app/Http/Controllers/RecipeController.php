@@ -16,6 +16,12 @@ class RecipeController extends Controller
         $this->middleware('auth:api');
     }
 
+    /**
+    * Display a listing of the resource.
+    *
+    * @return \Illuminate\Http\Response
+    */
+
     public function index()
     {
         return auth()->user()->recipes()->get();
@@ -37,19 +43,6 @@ class RecipeController extends Controller
                 return response()->json(['message' => 'Recipe already liked']);
             }
         }
-    }
-
-    /**
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
-    public function show(Recipe $recipe)
-    {
-        /* $recipes = Recipe::where('user_id', $request->user()->id->get()
-        return response()->json($recipes); */
-
-        /* return RecipeResource::collection(Recipe::all()); */
     }
 
     public function update(Request $request, Recipe $recipe)
